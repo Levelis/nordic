@@ -1,0 +1,67 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+
+
+<script>
+    //отключаем параллельные запросы
+    $.ajaxSetup({async : false})
+    //счетчик обновлений
+    let offset = 0;
+    setInterval(function () {
+        //отправляем запрост в TG и сохраняем ответ в переменную
+        let respons = $.get("https://api.telegram.org/bot2099864206:AAFyhErMTnGWZqlj90tyo4fq4oqUPF2Zu7I/getUpdates?offset=" + offset);
+        //console.log(respons);
+        //достаём именно текст из ответа
+        let json = respons.responseText
+        //console.log(json);
+        //преобразуем json в масив
+        let arr = JSON.parse(json)
+        //console.log(arr);
+        //если количество эллементов больше нуля
+        if (arr.result.length > 0) {
+            //находим текст первого сообщения
+            let text = arr.result[0].message.text;
+            //определяем ID пользователя
+            let userId = arr.result[0].message.from.id;
+            //запоминаем update_id последнего сообщения
+            offset = arr.result[0].update_id + 1;
+            
+            console.log(text);
+            //формирум ссылку для отправки сообщений
+            let url = "https://api.telegram.org/bot2099864206:AAFyhErMTnGWZqlj90tyo4fq4oqUPF2Zu7I/sendMessage?chat_id=" + userId + "&text=hello";
+            
+            if (text == "hello") {
+                url = "https://api.telegram.org/bot2099864206:AAFyhErMTnGWZqlj90tyo4fq4oqUPF2Zu7I/sendMessage?chat_id=" + userId + "&text=Приветствую мой друг";
+            }
+            if (text == "как дела?") {
+                url = "https://api.telegram.org/bot2099864206:AAFyhErMTnGWZqlj90tyo4fq4oqUPF2Zu7I/sendMessage?chat_id=" + userId + "&text=Просто пушка - как сам?";
+            }
+            if (text == "скинь фото") { 
+                url = "https://api.telegram.org/bot2099864206:AAFyhErMTnGWZqlj90tyo4fq4oqUPF2Zu7I/sendPhoto?chat_id=" + userId + "&photo=https://cdn.pixabay.com/photo/2019/09/18/21/12/dark-4487690_960_720.jpg";
+            }
+            if (text == "ты где?") {
+                url = "https://api.telegram.org/bot2099864206:AAFyhErMTnGWZqlj90tyo4fq4oqUPF2Zu7I/sendLocation?chat_id=" + userId + "&latitude=36&longitude=56";
+            }
+            if (text == "какой сегодня день?") {
+                //получаем время сообщения
+                let messageTime = arr.result[0].message.date;
+                //создаём объект для работы со временем
+                let date = new Date(messageTime * 1000)
+                let year = date.getFullYear();
+                let month = date.getMonth() + 1;
+                let day = date.getDate();
+                let houres = date.getHours();
+                let minutes = date.getMinutes();
+                let fullDate = day + '-' + month + '-' + year + ' ' + houres + ':' + minutes;
+                url = "https://api.telegram.org/bot2099864206:AAFyhErMTnGWZqlj90tyo4fq4oqUPF2Zu7I/sendMessage?chat_id=" + userId + "&text=" + fullDate;
+            }
+            //отправляем сообщение
+            $.get(url);     
+        }
+    },1000);    
+
+
+    
+
+
+</script>
