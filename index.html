@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" class="mark" placeholder="марка">
+    <input type="text" class="model" placeholder="модель">
+    <input type="text" class="photo" placeholder="фото">
+    <input type="text" class="hp" placeholder="лошади">
+    <button class="shoot">
+        Закинули
+    </button>
+    <div class="wasd">
+
+    </div>
+</body>
+
+<style>
+    .pading {
+        padding: 20px;
+    }
+    img {
+        width: 100%;
+    }
+
+    .wasd {
+        width: 600px;
+        height: 900px;
+        border: thick double #32a1ce;;
+        
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+<script>
+    //список всех машин
+    let all =[]; 
+    //клик по кнопке
+    $('.shoot').click(function () {
+        //собираем данные с формы
+        let mark = $('.mark').val();
+        let model = $('.model').val();
+        let photo = $('.photo').val();
+        let hp = $('.hp').val();
+        //создаём каркас новой машины
+        let car = {};
+        //наполняем машину характеристиками
+        car.mark = mark;
+        car.model = model;
+        car.photo = photo;
+        car.hp = hp;
+        console.log(car);
+        //добавляем новую машину в список
+        all.push(car);
+        //смотрим список машин
+        console.log(all);
+        document.querySelector('.wasd').innerHTML = ""
+        for(let i = 0; i < all.length; i ++ ) {
+            document.querySelector('.wasd').innerHTML += `
+                <div class="pading">
+                    <div class="marks">${all[i].mark}</div>
+                    <div class="models">${all[i].model}</div>
+                    <div class="image"><img src="${all[i].photo}"></div>
+                    <div class="hourse">${all[i].hp}</div>
+                </div>    
+            `
+        }
+    })
+</script>
+
+</html>  
